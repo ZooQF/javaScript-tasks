@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>task-4</title>
+    <style>
+        section>ul>li{
+            color: white;
+            display: inline-block;
+            background-color: #d45d5c;
+            text-align: center;
+            line-height: 50px;
+            width:100px;
+            height: 50px;
+            margin-right: 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<!--操作部分-->
+<form action="" id="" name="" method="get|lost">
+    <input type="text" id="text">
+    <input type="button" value="左侧入" id="leftIn">
+    <input type="button" value="右侧入" id="rightIn">
+    <input type="button" value="左侧出" id="leftOut">
+    <input type="button" value="右侧出" id="rightOut">
+</form>
+
+<!--队列部分-->
+<section>
+    <ul id="zone">
+    </ul>
+</section>
+<script>
+//    封装获取id的函数，简化代码
+    function byId(id){
+        return typeof(id)==="string"?document.getElementById(id):id;
+    }
+//    定义其他变量
+    var data=[],
+        text=byId("text"),
+        leftIn=byId("leftIn"),
+        rightIn=byId("rightIn"),
+        leftOut=byId("leftOut"),
+        rightOut=byId("rightOut"),
+        zone=byId("zone"),
+        list=document.getElementsByTagName("li"),
+        str="";
+//处理输入的数字，将其输入数组并封装函数
+    function change() {
+        for(var i=0;i<data.length;i++){
+            str+="<li>"+data[i]+"</li>";
+        }
+        zone.innerHTML=str;
+        str="";
+        text.value="";
+    }
+//     点击后对数组进行不同操作
+    leftIn.onclick=function () {
+        //        检测输入值是否为数字
+        if(text.value==""){
+            alert("请输入数字");
+        }else if(!isNaN(text.value)){
+            data.unshift(text.value);
+            change();
+        }else{
+            alert("不符合要求，请您重新输入");
+            text.value="";
+        }
+    }
+    rightIn.onclick=function () {
+        //        检测输入值是否为数字
+        if(text.value==""){
+            alert("请输入数字");
+        }else if(!isNaN(text.value)){
+            data.push(text.value);
+            change();
+        }else{
+            alert("不符合要求，请您重新输入");
+            text.value="";
+        }
+    }
+    leftOut.onclick=function () {
+            data.shift(text.value);
+            change();
+    }
+    rightOut.onclick=function () {
+            data.pop(text.value);
+            change();
+    }
+
+// 点击队列中元素删除
+    zone.addEventListener("click",function () {
+        if (event.target.nodeName.toLowerCase() == "li") {
+            zone.removeChild(event.target);
+        }
+    })
+</script>
+</body>
+</html>
