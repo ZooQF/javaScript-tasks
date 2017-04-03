@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>task-4</title>
+    <style>
+        section>ul>li{
+            color: white;
+            display: inline-block;
+            background-color: #d45d5c;
+            text-align: center;
+            line-height: 25px;
+            width:40px;
+            height: 25px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        #box{
+            margin-left: 50px;
+        }
+        #box>div{
+            width: 10px;
+            display: inline-block;
+            background-color: #009fcc;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<!--操作部分-->
+<form action="" id="" name="" method="get|lost">
+    <input type="text" id="text">
+    <input type="button" value="左侧入" id="leftIn">
+    <input type="button" value="右侧入" id="rightIn">
+    <input type="button" value="左侧出" id="leftOut">
+    <input type="button" value="右侧出" id="rightOut">
+    <input type="button" value="排序"  id="order">
+</form>
+
+<!--队列部分-->
+<section>
+    <ul id="zone">
+    </ul>
+</section>
+<section id="box">
+</section>
+<section>
+    <ul id="insert">
+    </ul>
+</section>
+<script>
+    //    封装获取id的函数，简化代码
+    function byId(id){
+        return typeof(id)==="string"?document.getElementById(id):id;
+    }
+    //    定义其他变量
+    var text=byId("text"),
+            data=[],
+            leftIn=byId("leftIn"),
+            rightIn=byId("rightIn"),
+            leftOut=byId("leftOut"),
+            rightOut=byId("rightOut"),
+            box=byId("box"),
+            zone=byId("zone");
+    //    封装两个函数：左入与右入
+    function changeleft() {
+        var node=document.createElement("li");
+        node.innerHTML=text.value;
+        zone.insertBefore(node,zone.firstChild);
+        text.value="";
+    }
+    function changeright() {
+        var node=document.createElement("li");
+        node.innerHTML=text.value;
+        zone.appendChild(node);
+        text.value="";
+    }
+    //      封装两个函数：删除左与删除右
+    var lilist=document.getElementsByTagName("li");
+    function delleft() {
+        lilist[0].remove();
+    }
+    function delright() {
+        lilist[lilist.length-1].remove();
+    }
+//            点击后对数组进行不同操作
+
+//    左边进入队列
+    leftIn.onclick=function () {
+        //        检测输入值是否为数字
+        if(text.value==""){
+            alert("请输入数字");
+        }else if(!isNaN(text.value)&&text.value<100&&text.value>10){
+            //    控制队列数量
+            if(lilist.length>60){
+                alert("队列元素数量过多，请不要超出60");
+            }else {
+                buildLeft();
+                changeleft();
+            }
+        }else{
+            alert("不符合要求，请您重新输入");
+            text.value="";
+        }
+    }
+//    右边进入队列
+    rightIn.onclick=function () {
+        //        检测输入值是否为数字
+        if(text.value==""){
+            alert("请输入数字");
+        }else if(!isNaN(text.value)&&text.value<100&&text.value>10){
+            //    控制队列数量
+            if(lilist.length>60){
+                alert("队列元素数量过多，请不要超出60");
+            }else {
+                buildRight();
+                changeright();
+            }
+        }else{
+            alert("不符合要求，请您重新输入");
+            text.value="";
+        }
+    }
+//    左边出队列
+    leftOut.onclick=function () {
+        delleft();
+        removeLeft();
+    }
+//    右边出队列
+    rightOut.onclick=function () {
+        delright();
+        removeRight();
+    }
+
+    // 点击队列中任一元素并将其删除
+    zone.addEventListener("click",function () {
+        if (event.target.nodeName.toLowerCase() == "li") {
+            zone.removeChild(event.target);
+        }
+    })
+    box.addEventListener("click",function () {
+        if (event.target.nodeName.toLowerCase() == "div") {
+            box.removeChild(event.target);
+        }
+    })
+// 封装函数，以柱状图的形式表现队列
+    function buildLeft() {
+        var div=document.createElement("div");
+        div.style.height=parseInt(text.value)+"px";
+        box.insertBefore(div,box.firstChild);
+    }
+    function buildRight() {
+        var div=document.createElement("div");
+        div.style.height=parseInt(text.value)+"px";
+        box.appendChild(div);
+    }
+
+    var divlist=box.getElementsByTagName("div");
+    function removeLeft() {
+        divlist[0].remove();
+    }
+    function removeRight() {
+        divlist[divlist.length-1].remove();
+    }
+//对获得队列进行插入排序，并将其显示
+  function insertion() {
+//      首先清空data数组
+      data=[];
+      var insert=byId("insert"),
+              list=zone.getElementsByTagName("li");
+      for(var t=0;t<list.length;t++){
+          data.push(parseInt(list[t].innerHTML));
+      }
+//      对data数组进行插入排序
+      if(data.length <= 1) {
+          return data;
+      }else {
+          for(var i=0; i<data.length; i++) {
+              for (var j = i - 1; j >= 0; j--) {
+                  if (data[j + 1] < data[j]) {
+                      var temp = data[j + 1];
+                      data[j + 1] = data[j];
+                      data[j] = temp;
+                  }
+              }
+          }
+      }
+//      将排序好的数组显示在页面中
+      var node="";
+      for(var a=0;a<data.length;a++){
+          node+="<li>"+data[a]+"</li>";
+      }
+      insert.innerHTML=node;
+      node="";
+  }
+  var order=byId("order");
+  order.onclick=insertion;
+  
+</script>
+</body>
+</html>
