@@ -39,32 +39,41 @@
         return typeof(id)==="string"?document.getElementById(id):id;
     }
     //    定义其他变量
-    var data=[],
-            text=byId("text"),
-            leftIn=byId("leftIn"),
-            rightIn=byId("rightIn"),
-            leftOut=byId("leftOut"),
-            rightOut=byId("rightOut"),
-            zone=byId("zone"),
-            list=document.getElementsByTagName("li"),
-            str="";
-    //处理输入的数字，将其输入数组并封装函数
-    function change() {
-        for(var i=0;i<data.length;i++){
-            str+="<li>"+data[i]+"</li>";
-        }
-        zone.innerHTML=str;
+    var text=byId("text"),
+        leftIn=byId("leftIn"),
+        rightIn=byId("rightIn"),
+        leftOut=byId("leftOut"),
+        rightOut=byId("rightOut"),
+        zone=byId("zone"),
         str="";
+//    封装两个函数：左入与右入
+    function changeleft() {
+        var node=document.createElement("li");
+        node.innerHTML=text.value;
+        zone.insertBefore(node,zone.firstChild);
         text.value="";
     }
-    //     点击后对数组进行不同操作
+    function changeright() {
+        var node=document.createElement("li");
+        node.innerHTML=text.value;
+        zone.appendChild(node);
+        text.value="";
+    }
+//        封装两个函数：删除左与删除右
+    var lilist=document.getElementsByTagName("li");
+    function delleft() {
+        lilist[0].remove();
+    }
+    function delright() {
+        lilist[lilist.length-1].remove();
+    }
+//         点击后对数组进行不同操作
     leftIn.onclick=function () {
         //        检测输入值是否为数字
         if(text.value==""){
             alert("请输入数字");
         }else if(!isNaN(text.value)){
-            data.unshift(text.value);
-            change();
+            changeleft();
         }else{
             alert("不符合要求，请您重新输入");
             text.value="";
@@ -75,23 +84,20 @@
         if(text.value==""){
             alert("请输入数字");
         }else if(!isNaN(text.value)){
-            data.push(text.value);
-            change();
+            changeright();
         }else{
             alert("不符合要求，请您重新输入");
             text.value="";
         }
     }
     leftOut.onclick=function () {
-        data.shift(text.value);
-        change();
+        delleft()
     }
     rightOut.onclick=function () {
-        data.pop(text.value);
-        change();
+        delright();
     }
 
-    // 点击队列中元素删除
+    // 点击队列中任一元素并将其删除
     zone.addEventListener("click",function () {
         if (event.target.nodeName.toLowerCase() == "li") {
             zone.removeChild(event.target);
