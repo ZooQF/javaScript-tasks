@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>task-7</title>
+    <style>
+        .box{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border: 1px solid #000;
+            width: 40%;
+            height: 80%;
+        }
+        .box-1{
+            margin: 100px auto;
+            width: 800px;
+            height: 500px;
+        }
+        .btn{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 0 auto;
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+<div class="box box-1">
+    <div class="box">
+        <div class="box">
+            <div class="box"></div>
+            <div class="box"></div>
+        </div>
+        <div class="box">
+            <div class="box"></div>
+            <div class="box"></div>
+        </div>
+    </div>
+    <div class="box">
+        <div class="box">
+            <div class="box"></div>
+            <div class="box"></div>
+        </div>
+        <div class="box">
+            <div class="box"></div>
+            <div class="box"></div>
+        </div>
+    </div>
+</div>
+<div class="btn">
+    <button class="btn-perOrder" type="button">前序遍历</button>
+    <button class="btn-inOrder" type="button">中序遍历</button>
+    <button class="btn-postOrder" type="button">后序遍历</button>
+</div>
+<script>
+    window.onload=function () {
+//        前序遍历
+        function preorderTraversal(node,arr){
+            if(node!==null){
+                arr.push(node);
+                preorderTraversal(node.firstElementChild,arr);
+                preorderTraversal(node.lastElementChild,arr);
+            }
+        }
+        //    中序遍历
+        function inorderTraversal(node,arr){
+            if(node!==null){
+                inorderTraversal(node.firstElementChild,arr);
+                arr.push(node);
+                inorderTraversal(node.lastElementChild,arr);
+            }
+        }
+//    后序遍历
+        function postorderTraversal(node,arr) {
+            if(node!==null){
+                postorderTraversal(node.firstElementChild,arr);
+                postorderTraversal(node.lastElementChild,arr);
+                arr.push(node);
+            }
+        }
+//    遍历改变样式
+        function changeColor(elem) {
+            var boxArr=document.querySelectorAll(".box");
+            for(var i=0;i<boxArr.length;i++){
+                boxArr[i].style.backgroundColor="#fff";
+            }
+            elem.style.backgroundColor="#009fcc";
+        }
+//    动画实现
+        function start(arr,i) {
+            let timer = setInterval(function () {
+                if(i > arr.length -1 ){
+                    arr[arr.length -1].style.backgroundColor = "#fff";
+                    clearInterval(timer);
+                    return
+                }
+                else {
+                    changeColor(arr[i]);
+                }
+                ++i;
+            },500);
+        }
+//    按钮遍历
+        function btnReady(root,t) {
+            var i=0,
+                    arr=[];
+            t(root,arr);
+            start(arr,i);
+        }
+        function press() {
+            var root = document.querySelector('.box-1'),
+                    preOrderBtn = document.querySelector('.btn-perOrder'),
+                    inOrderBtn = document.querySelector('.btn-inOrder'),
+                    postOrderBtn = document.querySelector('.btn-postOrder');
+            preOrderBtn.onclick = function () {
+                btnReady(root,preorderTraversal);
+            };
+            inOrderBtn.onclick = function () {
+                btnReady(root,inorderTraversal);
+            };
+            postOrderBtn.onclick = function () {
+                btnReady(root,postorderTraversal);
+            };
+        }
+        press();
+    }
+
+</script>
+</body>
+</html>
