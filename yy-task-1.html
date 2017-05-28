@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>form-task-1</title>
+    <style>
+        table{
+            position: absolute;
+            top:30%;
+            left:30%;
+        }
+        .tab_tr{
+            height: 100px;
+        }
+        .tab_tr_th{
+            font-size: medium;
+            font-weight: 800;
+        }
+        .tab_tr_td1_p{
+            color: #6e8095;
+            text-align: center;
+        }
+        .tab_tr_td1_txt{
+            border:#AAAAAA solid 2px;
+            height: 30px;
+            width: 400px;
+        }
+        .tab_tr_td1_txt:hover,.tab_tr_td1_txt:active{
+            border:#009fcc solid 2px;
+        }
+        .tab_tr_td2_butt{
+            width: 100px;
+            height: 30px;
+            color: white;
+            background-color: #003C9D;
+            border: #003C9D 1px;
+            border-radius: 4px;
+        }
+        .tab_tr_td2_butt:hover{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<table class="tab">
+    <tr class="tab_tr">
+        <th class="tab_tr_th">名称</th>
+        <td class="tab_tr_td1">
+            <input type="text" class="tab_tr_td1_txt" id="tab_tr_td1_txt">
+        </td>
+        <td class="tab_tr_td2">
+            <input type="button" value="验证" class="tab_tr_td2_butt" id="tab_tr_td2_butt">
+        </td>
+    </tr>
+    <tr>
+        <th></th>
+        <td class="tab_tr_td1"><p class="tab_tr_td1_p" id="tab_tr_td1_p">必填，长度为4-16个字符</p></td>
+    </tr>
+</table>
+<script>
+    var butt=document.getElementById("tab_tr_td2_butt"),
+            ps=document.getElementById("tab_tr_td1_p"),
+            inpTxt=document.getElementById("tab_tr_td1_txt");
+    function getValue(eleid){
+        var e = document.getElementById(eleid);
+        if (e.value) {
+
+            return e.value;
+        }
+    }
+    butt.addEventListener("click",function () {
+        var pp=getValue("tab_tr_td1_txt");
+        var than=checkInp(pp);
+        changeps(than);
+    })
+    function checkInp(str) {
+        if (str == null) {
+            return 0;
+        }else {
+            var check=/[^x00-xff]/g;
+            str=str.replace(check,"aa");
+            if(str.length>=4 && str.length<=16){
+                return 1;
+            }else{
+                return 2;
+            }
+        }
+    }
+    function changeps(num) {
+        switch (num){
+            case 0:
+                ps.innerHTML="姓名不能为空";
+                inpTxt.style.borderColor="red";
+                break;
+            case 1:
+                ps.innerHTML="名称格式正确";
+                inpTxt.style.borderColor="green";
+                break;
+            case 2:
+                ps.innerHTML="长度应为4~16个字符";
+                inpTxt.style.borderColor="red";
+                break;
+        }
+
+    }
+</script>
+</body>
+</html>
